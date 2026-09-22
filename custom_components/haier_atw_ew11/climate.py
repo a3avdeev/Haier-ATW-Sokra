@@ -60,6 +60,8 @@ class HaierAtwClimate(HaierAtwEntity, ClimateEntity):
         self._attr_target_temperature_step = float(setpoint_spec.get("step", 1.0))
         self._attr_min_temp = float(setpoint_spec.get("min", 0))
         self._attr_max_temp = float(setpoint_spec.get("max", 80))
+        
+        # Получаем регистр текущей температуры строго из профиля текущего устройства
         self._current_temperature_register = int(getattr(coordinator, "current_temperature_register", 40142))
 
         profile_mode_to_hvac = dict(getattr(coordinator, "mode_to_hvac", {}))
@@ -111,7 +113,7 @@ class HaierAtwClimate(HaierAtwEntity, ClimateEntity):
         raw = self.coordinator.get_raw_by_register(self._setpoint_verify)
         if raw is None:
             return None
-        return float(raw) * self._scale_read
+        return round(float(raw) * self._scale_read, 1)
 
     @property
     def current_temperature(self) -> float | None:
@@ -122,7 +124,7 @@ class HaierAtwClimate(HaierAtwEntity, ClimateEntity):
         value = int(raw)
         if dtype == "int16" and value >= 0x8000:
             value -= 0x10000
-        return float(value) * float(scale)
+        return round(float(value) * float(scale), 1)
 
     async def async_set_temperature(self, **kwargs) -> None:
         if (temperature := kwargs.get("temperature")) is None:
