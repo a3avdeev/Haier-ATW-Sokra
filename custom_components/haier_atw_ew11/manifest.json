@@ -1,8 +1,9 @@
 {
   "domain": "haier_atw_ew11",
-  "name": "Haier ATW (EW11 Modbus)",
+  "name": "Haier ATW (Sokra)",
   "codeowners": [
-    "@moukas"
+    "@moukas",
+    "@a3avdeev"
   ],
   "config_flow": true,
   "documentation": "https://github.com/moukas/Haier-ATW/blob/master/README.md",
@@ -12,5 +13,5 @@
   "requirements": [
     "pymodbus>=3.6.9"
   ],
-  "version": "0.2.0"
+  "version": "1.0.0-custom"
 }
